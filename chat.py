@@ -27,6 +27,7 @@ class Chat(object):
         print(response)
 
     def match_width(self, msg: str):
+        msg = repr(msg)[1:-1]
         if len(msg) < self.max_msg_width:
             self.msg_width = len(msg)
         else:
