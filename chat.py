@@ -4,20 +4,26 @@ from actor import Actor
 class Chat(object):
     def __init__(self,
                  width=100,
-                 msg_width=70):
+                 msg_width=70,
+                 main_actor: Actor=None):
         self.width = width
         self.msg_width = msg_width
         self.max_msg_width = msg_width
-        self.main_actor: Actor = None
-        self.current_actor: Actor = None
+        self.main_actor = main_actor
 
-    def send_message(self, msg: str, actor: Actor):
-        self.current_actor = actor
+    def set_chat_width(self, width):
+        self.width = width
+
+    def set_msg_width(self, msg_width):
+        self.max_msg_width = msg_width
+        self.msg_width = msg_width
+
+    def send_message(self, actor: Actor, msg: str):
         rows = self.match_width(msg)
         right_align = False
-        if self.current_actor == self.main_actor:
+        if actor == self.main_actor:
             right_align = True
-        response = self.join(rows, right_align=right_align)
+        response = self.join(rows, current_actor=actor, right_align=right_align)
         print(response)
 
     def match_width(self, msg: str):
@@ -55,14 +61,14 @@ class Chat(object):
 
         return rows
 
-    def join(self, rows: list, right_align=False):
+    def join(self, rows: list, current_actor: Actor, right_align=False):
         lines = [
             ' '.join(r).ljust(self.msg_width)
             for r in rows
         ]
 
         lines = self.outline(lines, padding=2)
-        lines = self.add_actor_info(lines, self.current_actor, right_align=right_align)
+        lines = self.add_actor_info(lines, current_actor, right_align=right_align)
 
         if right_align:
             lines = [line.rjust(self.width) for line in lines]

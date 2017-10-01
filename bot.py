@@ -1,9 +1,12 @@
 from actor import Actor
+from chat import Chat
 
 
 class Bot(Actor):
-    def __init__(self, name='bot', icon='🤖'):
-        super().__init__(name, icon)
+    def __init__(self, chat: Chat, actor: Actor):
+        super().__init__(name='bot', icon='🤖')
+        self.chat = chat
+        self.actor = actor
 
     def process_message(self, message: str) -> (str, bool):
         if len(message) > 1 and message.startswith('/'):
